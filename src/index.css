@@ -1,0 +1,65 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  background: #0b0c10;
+  color: #e6e9f0;
+  font-family: Inter, system-ui, sans-serif;
+  overflow: hidden;
+  user-select: none;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #232838;
+  border-radius: 6px;
+  border: 2px solid #0b0c10;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2f3648;
+}
+
+.font-mono,
+code {
+  font-family: "JetBrains Mono", Consolas, monospace;
+}
+
+/* Custom titlebar drag region */
+.drag-region {
+  -webkit-app-region: drag;
+}
+.no-drag {
+  -webkit-app-region: no-drag;
+}
+
+/* Risk badges */
+.badge {
+  @apply inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider;
+}
+.badge-high {
+  @apply badge bg-accent/15 text-red-400 border border-accent/40;
+}
+.badge-medium {
+  @apply badge bg-amber-500/10 text-amber-400 border border-amber-500/30;
+}
+.badge-low {
+  @apply badge bg-emerald-500/10 text-emerald-400 border border-emerald-500/30;
+}
+
+.status-ok { @apply text-emerald-400; }
+.status-warn { @apply text-amber-400; }
+.status-fail { @apply text-red-400; }
+.status-info { @apply text-sky-400; }

@@ -1,0 +1,89 @@
+{
+  "name": "mythic-checker",
+  "productName": "MYTHIC CHECKER",
+  "version": "1.4.0",
+  "description": "CS2 player PC checker — scans for cheats, prohibited software and system traces.",
+  "main": "dist-electron/main.js",
+  "author": "MYTHIC",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -k -n web,electron \"vite\" \"wait-on http://localhost:5173 && npm run build:electron && cross-env MYTHIC_DEV=1 electron .\"",
+    "build:electron": "esbuild electron/main.ts electron/preload.ts --bundle --platform=node --external:electron --outdir=dist-electron --format=cjs --resolve-extensions=.ts,.js,.json",
+    "build": "vite build && npm run build:electron",
+    "dist:win": "npm run build && electron-builder --win nsis",
+    "dist:linux": "npm run build && electron-builder --linux AppImage deb tar.gz --x64",
+    "typecheck": "tsc --noEmit && tsc --noEmit --target ES2022 --module ESNext --moduleResolution Bundler --esModuleInterop --skipLibCheck --types node electron/main.ts electron/preload.ts"
+  },
+  "dependencies": {
+    "lucide-react": "^0.454.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.8.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "autoprefixer": "^10.4.20",
+    "concurrently": "^9.0.1",
+    "cross-env": "^7.0.3",
+    "electron": "^33.0.2",
+    "electron-builder": "^25.1.8",
+    "esbuild": "^0.24.0",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10",
+    "wait-on": "^8.0.1"
+  },
+  "build": {
+    "appId": "gg.mythic.checker",
+    "productName": "MYTHIC CHECKER",
+    "files": [
+      "app-dist/**/*",
+      "dist-electron/main.js",
+      "dist-electron/preload.js",
+      "assets/icon.*"
+    ],
+    "extraResources": [
+      {
+        "from": "electron/backend/data",
+        "to": "signatures"
+      }
+    ],
+    "directories": {
+      "output": "release17"
+    },
+    "win": {
+      "extraResources": [{ "from": "assets/tools", "to": "tools", "filter": ["recentfilesview/RecentFilesView.exe", "recentfilesview/RecentFilesView.chm", "recentfilesview/readme.txt", "systeminformer/amd64/**/*", "!**/*.settings.xml"] }],
+      "icon": "assets/icon.ico",
+      "requestedExecutionLevel": "highestAvailable",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "MYTHIC-Checker-v${version}-setup.exe"
+    },
+    "linux": {
+      "icon": "assets/icon.png",
+      "maintainer": "MYTHIC",
+      "target": ["AppImage", "deb", "tar.gz"],
+      "category": "Utility",
+      "artifactName": "MYTHIC-Checker-v${version}.${ext}"
+    },
+    "nsis": {
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico",
+      "installerHeaderIcon": "assets/icon.ico",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "shortcutName": "MYTHIC CHECKER",
+      "createDesktopShortcut": true
+    }
+  }
+}
